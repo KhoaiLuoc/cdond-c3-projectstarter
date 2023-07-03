@@ -66,10 +66,11 @@ jobs:
             cd frontend
             npm install
             npm run build
+      - notify-toan-slack
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - notify-toan-slack
+
 
   build-backend:
     docker:
@@ -332,8 +333,9 @@ cleanup:
 workflows:
   default:
     jobs:
-      - notify2
-      # - build-frontend
+      # test notify to slack
+      # - notify2 
+      - build-frontend
       # - build-backend
       # - test-frontend:
       #     requires: [build-frontend]
