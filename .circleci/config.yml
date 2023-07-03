@@ -2,8 +2,17 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@4.1
-  
+
 commands:
+  notify-toan-slack:
+        steps:
+          - slack/notify:
+              event: fail
+              template: basic_fail_1
+          - slack/notify:
+              event: pass
+              template: success_tagged_deploy_1
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
@@ -36,18 +45,18 @@ commands:
             fi
             
 jobs:
-  notify2:
-      docker:
-        - image: cimg/base:stable
-      steps:
-        - run:
-            command: exit 1
-        - slack/notify:
-            event: fail
-            template: basic_fail_1
-        - slack/notify:
-            event: pass
-            template: success_tagged_deploy_1
+  # notify2:
+  #     docker:
+  #       - image: cimg/base:stable
+  #     steps:
+  #       - run:
+  #           command: exit 1
+  #       - slack/notify:
+  #           event: fail
+  #           template: basic_fail_1
+  #       - slack/notify:
+  #           event: pass
+  #           template: success_tagged_deploy_1
 
   build-frontend:
     docker:
@@ -65,6 +74,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - notify-toan-slack
 
   build-backend:
     docker:
@@ -82,23 +92,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: always
+      - notify-toan-slack
+
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -115,6 +110,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-test
+      - notify-toan-slack
                 
   test-backend:
     docker:
@@ -132,6 +128,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-test
+      - notify-toan-slack
             
   scan-frontend:
     docker:
@@ -150,6 +147,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-scan
+      - notify-toan-slack
 
   scan-backend:
     docker:
@@ -168,6 +166,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-scan
+      - notify-toan-slack
 
   # deploy-infrastructure:
   #   docker:
@@ -338,17 +337,16 @@ cleanup:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend:
-      - notify2
-      # - test-frontend:
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
       # - deploy-infrastructure:
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:
