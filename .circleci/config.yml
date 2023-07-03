@@ -36,6 +36,27 @@ commands:
             fi
             
 jobs:
+  notify2:
+      docker:
+        - image: cimg/base:stable
+      steps:
+        - slack/notify:
+            custom: |
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "plain_text",
+                        "text": "*This is a text notification*",
+                        "emoji": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            event: always
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -326,7 +347,8 @@ workflows:
   default:
     jobs:
       # - build-frontend
-      - build-backend:
+      # - build-backend:
+      - notify2:
           context: slack-secrets
       # - test-frontend:
       #     requires: [build-frontend]
