@@ -40,6 +40,8 @@ jobs:
       docker:
         - image: cimg/base:stable
       steps:
+        - run:
+            command: exit 1
         - slack/notify:
             event: fail
             template: basic_fail_1
