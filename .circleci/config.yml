@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.12.5
+  slack: circleci/slack@4.1
 
 commands:
   notify-toan-slack:
@@ -47,7 +47,7 @@ commands:
 jobs:
   notify2:
       docker:
-        - image: circleci/node:13.8.0
+        - image: cimg/node:13.8.0
       steps:
         - run:
             command: exit 1
