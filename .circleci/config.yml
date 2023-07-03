@@ -360,7 +360,7 @@ workflows:
       # End section 1
       
       # Start section 2
-      - deploy-infrastructure:
+      - deploy-infrastructure
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:
       #       branches:
