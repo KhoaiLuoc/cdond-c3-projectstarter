@@ -223,9 +223,9 @@ jobs:
       - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible
+          # Install aws-cli for using command destroy-environment
           command: |
-            apk add --update ansible
-            ansible --version
+            apk add --update --no-cache tar gzip ansible aws-cli
       - run:
           name: Configure server
           working_directory: ./.circleci/ansible
