@@ -16,8 +16,7 @@
   become: yes
   shell:
     cmd: |
-      npm install
-      cd /home/ubuntu/backend
-      pm2 stop backend
-      pm2 delete backend
-      pm2 start npm -- start
+      # cd /home/ubuntu/backend
+      # pm2 stop backend
+      pm2 delete all
+      pm2 start -f /home/ubuntu/backend/dist/main.js
