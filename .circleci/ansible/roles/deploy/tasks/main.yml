@@ -26,7 +26,7 @@
 
 - name: "print to stdout Evironemnt from ec2 "
   become: yes
-  shell: "pm2 log"
+  shell: "printenv"
   register: helloNodeDebug
 
 - name: "install node toantc3 helloNodeDebug debug"
