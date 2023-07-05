@@ -344,7 +344,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: python:3.7-alpine3.16
+      - image: amazon/aws-cli
       # - image: python:3.7-alpine3.16
     steps:
       - checkout
