@@ -18,6 +18,8 @@
     cmd: |
       # cd /home/ubuntu/backend
       # pm2 stop backend
+      pwd
+      printenv
       pm2 delete all
       pm2 start -f /home/ubuntu/backend/dist/main.js
   environment:
