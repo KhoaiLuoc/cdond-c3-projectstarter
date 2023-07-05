@@ -26,9 +26,18 @@
 
 - name: "print to stdout Evironemnt from ec2 "
   become: yes
-  shell: "printenv"
+  shell: "pm2 log"
   register: helloNodeDebug
 
 - name: "install node toantc3 helloNodeDebug debug"
   debug:
     msg: "{{ helloNodeDebug.stdout_lines }}"
+
+- name: "Register Export curl 3030"
+  become: yes
+  shell: "curl localhost:3030/api/status"
+  register: helloNodeDebug3
+
+- name: "Export curl 3030"
+  debug:
+    msg: "{{ helloNodeDebug3.stdout_lines }}"
