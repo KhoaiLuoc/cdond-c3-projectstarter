@@ -26,7 +26,6 @@
       pm2 stop default 
       pm2 start npm -- start
       pm2 status
-      curl localhost:3030/api/status
   register: print_result
 
 - name: "Export run webserver"
@@ -35,4 +34,4 @@
 
 - name: Wait for system to become reachable over WinRM
   ansible.builtin.wait_for_connection:
-    timeout: 900
+    timeout: 10
