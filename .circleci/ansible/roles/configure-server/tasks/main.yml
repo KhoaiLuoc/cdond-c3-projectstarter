@@ -39,12 +39,3 @@
     global: yes
     production: yes
     state: present
-
-- name: "print to stdout Evironemnt from CircleCI --version"
-  become: yes
-  shell: "printenv"
-  register: helloNodeDebug
-
-- name: "install node toantc3 helloNodeDebug debug"
-  debug:
-    msg: "{{ helloNodeDebug.stdout_lines }}"
