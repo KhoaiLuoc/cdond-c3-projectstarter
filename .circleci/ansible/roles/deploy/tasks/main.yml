@@ -32,11 +32,6 @@
   debug:
     msg: "{{ print_result.stdout_lines }}"
 
-# - name: "Register Export curl 3030"
-#   become: yes
-#   shell: "printenv"
-#   register: helloNodeDebug3
-
-# - name: "Export curl 3030"
-#   debug:
-#     msg: "{{ helloNodeDebug3.stdout_lines }}"
+- name: Wait for system to become reachable over WinRM
+  ansible.builtin.wait_for_connection:
+    timeout: 900
