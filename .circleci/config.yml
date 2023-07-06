@@ -399,7 +399,7 @@ jobs:
             curl https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/OLD_WORK_FLOW -XDELETE
             curl https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/OLD_WORK_FLOW  -d "${WorkflowID}"
             echo "OLD_WORK_FLOW"
-            curl --insecure https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/OLD_WORK_FLOW)
+            curl --insecure https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/OLD_WORK_FLOW
 
       # - run:
       #     name: Update cloudfront distribution
