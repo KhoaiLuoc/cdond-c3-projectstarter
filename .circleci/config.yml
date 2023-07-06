@@ -401,14 +401,14 @@ jobs:
             echo "OLD_WORK_FLOW"
             curl --insecure https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/OLD_WORK_FLOW
 
-      # - run:
-      #     name: Update cloudfront distribution
-      #     command: |
-      #        aws cloudformation deploy \
-      #         --template-file .circleci/files/cloudfront.yml \
-      #         --stack-name InitialStack2 \
-      #         --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
-      #         --tags project=udapeople
+      - run:
+          name: Update cloudfront distribution
+          command: |
+             aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront.yml \
+              --stack-name InitialStack2 \
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
@@ -429,7 +429,8 @@ jobs:
             command: |
               OldWorkflowID=$(curl --insecure https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/OLD_WORK_FLOW)
               CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
-              if aws s3 ls "s3://s3-toantc3-bucket" 2>&1 | grep -q 'NoSuchBucket'
+              bucketstatus=$(aws s3api head-bucket --bucket s3-toantc3-bucket 2>/dev/null && echo "yes" || echo "no")
+              if [[ "$bucketstatus" == "no" ]]
               then
                   echo "No exist bucket s3-toantc3-bucket"
               else
@@ -440,8 +441,8 @@ jobs:
               if [[ "$OldWorkflowID" != "${CurrentWorkflowID}" ]]
               then
                 echo "Remove resource of OldWorkflowID=$OldWorkflowID"
-                # aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-                if aws s3 ls "s3://udapeople-${OldWorkflowID}" 2>&1 | grep -q 'NoSuchBucket'
+                bucketstatus=$(aws s3api head-bucket --bucket udapeople-${OldWorkflowID} 2>/dev/null && echo "yes" || echo "no")
+                if [[ "$bucketstatus" == "no" ]]
                 then
                   echo "No exist bucket udapeople-${OldWorkflowID}"
                 else
