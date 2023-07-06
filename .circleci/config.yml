@@ -429,17 +429,24 @@ jobs:
             command: |
               OldWorkflowID=$(curl --insecure https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/OLD_WORK_FLOW)
               CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
-              aws s3 ls "s3://udapeople-${OldWorkflowID}" 2>&1
+              if aws s3 ls "s3://s3-toantc3-bucket" 2>&1 | grep -q 'NoSuchBucket'
+              then
+                  echo "No exist bucket s3-toantc3-bucket"
+              else
+                  echo "Remove bucket s3-toantc3-bucket"
+                  # aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              fi
+              
               if [[ "$OldWorkflowID" != "${CurrentWorkflowID}" ]]
               then
                 echo "Remove resource of OldWorkflowID=$OldWorkflowID"
                 # aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
                 if aws s3 ls "s3://udapeople-${OldWorkflowID}" 2>&1 | grep -q 'NoSuchBucket'
                 then
-                  echo "Remove bucket udapeople-${OldWorkflowID}"
-                  aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-                else
                   echo "No exist bucket udapeople-${OldWorkflowID}"
+                else
+                  echo "Remove bucket udapeople-${OldWorkflowID}"
+                  # aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
                 fi
                 aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
                 aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
