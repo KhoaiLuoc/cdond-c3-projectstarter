@@ -1,1 +1,0 @@
-The screenshot for Section 2 : Utilize Deployment Strategies to design and build CI/CD pipelines that support Continuous Delivery processes.
