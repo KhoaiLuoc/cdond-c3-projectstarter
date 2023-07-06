@@ -293,6 +293,7 @@ jobs:
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
+            curl https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/API_URL -XDELETE
             curl https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/API_URL  -d "${API_URL}"
       - run:
           name: Deploy frontend objects
