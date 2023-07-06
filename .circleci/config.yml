@@ -429,6 +429,7 @@ jobs:
             command: |
               OldWorkflowID=$(curl --insecure https://kvdb.io/JX1ugq5AncVPLacEuZaQ8x/OLD_WORK_FLOW)
               CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
+              aws s3 ls "s3://udapeople-${OldWorkflowID}" 2>&1
               if [[ "$OldWorkflowID" != "${CurrentWorkflowID}" ]]
               then
                 echo "Remove resource of OldWorkflowID=$OldWorkflowID"
